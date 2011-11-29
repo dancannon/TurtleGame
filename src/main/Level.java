@@ -11,6 +11,7 @@ import turtle.TurtleGUI;
 
 public class Level
 {
+	private GameManager gm;
 	private Player player;
 	private Ghost[] ghosts;
 	public Point2D spawn = new Point2D.Double(13, 14);
@@ -24,7 +25,7 @@ public class Level
 	private LevelTile door = new LevelTile(LevelTile.TYPE_DOOR);
 	private LevelTile dot = new LevelTile(LevelTile.TYPE_DOT);
 	private LevelTile powerup = new LevelTile(LevelTile.TYPE_POWER_DOT);
-	private LevelTile[][] map =
+	private LevelTile[][] map, defaultMap =
 		{
 			/*      0     1     2     3     4     5     6     7     8     9    10    11    12    13    14    15    16    17    18    19    20    21    22    23    24    25    26*/  
 			/*0*/ {wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall},
@@ -53,14 +54,28 @@ public class Level
 			/*23*/{wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall, wall},
 		};
 	
-	public Level()
+	public Level(GameManager gm)
 	{
-		
+		this.gm = gm;
+		map = defaultMap.clone();
+	}
+	
+	public void resetMap()
+	{
+		map = defaultMap.clone();
 	}
 	
 	public void tick()
 	{
-		
+		if(isLevelComplete()) {
+			if(getGameManager().getLevelID() == 10) {
+				System.out.println("Epic Win! Your score is " + getGameManager().getScore());
+				Runtime.getRuntime().exit(0);
+			} else {
+				System.out.println("Level Complete. Score: " + getGameManager().getScore());
+				getGameManager().newLevel(getGameManager().getLevelID() + 1);
+			}
+		}
 	}
 	
 	public void render(Turtle t)
@@ -112,14 +127,66 @@ public class Level
 		return this.map[(int) position.getY()][(int) position.getX()];
 	}
 	
+	public void setTile(Point2D position, LevelTile tile)
+	{
+		this.map[(int) position.getY()][(int) position.getX()] = tile;
+	}
+	
+	public boolean isLevelComplete()
+	{
+		boolean levelComplete = true;
+		
+		for(int i=0; i<map.length;i++) {
+			for(int j=0; j<map[i].length;j++) {
+				if(map[i][j].getType() == LevelTile.TYPE_DOT) {
+					levelComplete = false;
+				}
+			}
+		}
+		
+		return levelComplete;
+	}
+	
 	public Point2D getExitPipe(Point2D position) throws Exception
 	{
 		if(position.equals(new Point2D.Double(0, 12))) {
-			return new Point2D.Double(26, 12);
+			return new Point2D.Double(25, 12);
 		} else if(position.equals(new Point2D.Double(26, 12))) {
-			return new Point2D.Double(0, 12);
+			return new Point2D.Double(1, 12);
 		} else {
 			throw new Exception("Invalid coordinate");
 		}
+	}
+
+	/**
+	 * @param gameManager the gameManager to set
+	 */
+	public void setGameManager(GameManager gameManager)
+	{
+		this.gm = gameManager;
+	}
+
+	/**
+	 * @return the gameManager
+	 */
+	public GameManager getGameManager()
+	{
+		return gm;
+	}
+
+	/**
+	 * @param ghosts the ghosts to set
+	 */
+	public void setGhosts(Ghost[] ghosts)
+	{
+		this.ghosts = ghosts;
+	}
+
+	/**
+	 * @return the ghosts
+	 */
+	public Ghost[] getGhosts()
+	{
+		return ghosts;
 	}
 }

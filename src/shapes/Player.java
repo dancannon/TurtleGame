@@ -7,12 +7,11 @@ import turtle.TurtleShape;
 
 public class Player implements TurtleShape
 {
-	static final double RADIUS = 5;
+	static final double RADIUS = 8;
 	
 	@Override
 	public void drawMe(Turtle turtle)
 	{
-		
 		double moveSize = (2*Math.PI*RADIUS) / 360;
 		
 		turtle.penUp();

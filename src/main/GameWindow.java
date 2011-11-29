@@ -8,8 +8,7 @@ import java.lang.Thread;
 public class GameWindow extends TurtleGUI implements Runnable
 {
 	private static final long serialVersionUID = 1L;
-	static final int UPDATE_RATE = 3;  // number of game update per second
-	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE;  // nanoseconds
+	static final int UPDATE_RATE = 4;  // number of game update per second
 	
 	private Game game;
 	private Thread thread;
@@ -56,7 +55,8 @@ public class GameWindow extends TurtleGUI implements Runnable
 			
 			// Delay timer to provide the necessary delay to meet the target rate
 			timeTaken = System.nanoTime() - beginTime;
-			timeLeft = (UPDATE_PERIOD - timeTaken) / 1000000;  // in milliseconds
+			double updatePeriod = 1000000000L / (UPDATE_RATE * getGameManager().getSpeed());
+			timeLeft = (long) ((updatePeriod - timeTaken) / 1000000);  // in milliseconds
 			if (timeLeft < 10) timeLeft = 10;   // set a minimum
 			try {
 				// Provides the necessary delay and also yields control so that other thread can do work.

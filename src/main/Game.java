@@ -8,7 +8,7 @@ public class Game
 {
 	private int time;
 	private GameManager gameManager;
-	
+		
 	public Game(GameManager gameManager)
 	{
 		this.gameManager = gameManager;
@@ -40,6 +40,10 @@ public class Game
 //				setMenu(new PauseMenu());
 //			}
 //		}
+		
+		if(getGameManager().isGameOver()) {
+			System.out.println("Level finished! Score: " + getGameManager().getScore());
+		}
 		
 		getGameManager().getPlayer().tick();
 		getGameManager().getLevel().tick();

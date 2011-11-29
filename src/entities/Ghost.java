@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import main.GameManager;
+import main.LevelTile;
 
 import turtle.Turtle;
 
@@ -70,10 +71,20 @@ public class Ghost extends MoveableEntity
 	
 	protected boolean move(Point2D position)
 	{
-		if(!super.move(position)) {
+		if(!super.checkMove(position)) {
 			return false;
 		}
-
+		
+		//If entity lands on pipe tile teleport to exit
+		try {
+			if(this.getGameManager().getLevel().getTile(position).getType() == LevelTile.TYPE_PIPE) {
+				position = this.getGameManager().getLevel().getExitPipe(position);
+			}
+		} catch (Exception e) {
+			return false;
+		}
+		
+		setPosition(position);
 		return true;
 	}
 }

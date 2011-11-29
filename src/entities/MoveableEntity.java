@@ -38,7 +38,7 @@ abstract public class MoveableEntity extends Entity
 		this.direction = direction;
 	}
 	
-	protected boolean move(Point2D position)
+	protected boolean checkMove(Point2D position)
 	{
 		try {		
 			//Check if move is within the bounds
@@ -51,13 +51,6 @@ abstract public class MoveableEntity extends Entity
 				return false;
 			}
 			
-			//If entity lands on pipe tile teleport to exit
-			if(this.getGameManager().getLevel().getTile(position).getType() == LevelTile.TYPE_PIPE) {
-				setPosition(this.getGameManager().getLevel().getExitPipe(position));
-				return true;
-			}
-			
-			setPosition(position);
 			return true;
 		} catch (Exception e) {
 			return false;

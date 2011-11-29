@@ -46,7 +46,6 @@ public class TurtleView extends JPanel
 		setPreferredSize(size);
 		origin = new Point(0, 0);
 		theTurtle = model;
-        );
 	}
 	
 	 public void update(Graphics g) {
@@ -64,7 +63,6 @@ public class TurtleView extends JPanel
 		offG.fillRect(0, 0, WIDTH, HEIGHT);
 		
 		//Draw to offscreen
-		
 		Point2D[] path = theTurtle.getPath();
 		Color[] colors = theTurtle.getColors();
 		boolean[] linesPresent = theTurtle.getLinesPresent();
