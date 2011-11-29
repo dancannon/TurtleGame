@@ -26,8 +26,8 @@ public class TurtleView extends JPanel
 	private static final long serialVersionUID = 1L;
 	private final Point origin;
 	private final Turtle theTurtle;
-	private final int HEIGHT = 470;
-	private final int WIDTH = 530;
+	private final int HEIGHT = 483;
+	private final int WIDTH = 543;
 
 	/**
 	 * Constructor, using given turtle.
@@ -46,12 +46,7 @@ public class TurtleView extends JPanel
 		setPreferredSize(size);
 		origin = new Point(0, 0);
 		theTurtle = model;
-		model.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e)
-			{
-				repaint();
-			}
-		});
+        );
 	}
 	
 	 public void update(Graphics g) {

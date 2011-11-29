@@ -9,7 +9,7 @@ import entities.Player;
 import turtle.Turtle;
 import turtle.TurtleGUI;
 
-public class Level extends TurtleGUI
+public class Level
 {
 	private Player player;
 	private Ghost[] ghosts;
@@ -63,9 +63,8 @@ public class Level extends TurtleGUI
 		
 	}
 	
-	public void render()
+	public void render(Turtle t)
 	{
-		Turtle t = getTurtle();
 		if(bufferedImage == null || redraw == true) {
 			for(int i=0;i<map.length;i++) {
 				for(int j=0;j<map[i].length;j++) {
@@ -115,7 +114,6 @@ public class Level extends TurtleGUI
 	
 	public Point2D getExitPipe(Point2D position) throws Exception
 	{
-		System.out.println(map[12][0]);
 		if(position.equals(new Point2D.Double(0, 12))) {
 			return new Point2D.Double(26, 12);
 		} else if(position.equals(new Point2D.Double(26, 12))) {

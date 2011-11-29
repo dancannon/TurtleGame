@@ -8,7 +8,7 @@ import java.lang.Thread;
 public class GameWindow extends TurtleGUI implements Runnable
 {
 	private static final long serialVersionUID = 1L;
-	static final int UPDATE_RATE = 1;  // number of game update per second
+	static final int UPDATE_RATE = 3;  // number of game update per second
 	static final long UPDATE_PERIOD = 1000000000L / UPDATE_RATE;  // nanoseconds
 	
 	private Game game;
@@ -52,7 +52,7 @@ public class GameWindow extends TurtleGUI implements Runnable
 			
 			tick();
 			// Refresh the display
-			repaint();
+			render();
 			
 			// Delay timer to provide the necessary delay to meet the target rate
 			timeTaken = System.nanoTime() - beginTime;
@@ -71,13 +71,16 @@ public class GameWindow extends TurtleGUI implements Runnable
 		}
 	}
 	
-	public void repaint()
+	public void render()
 	{
 		GameManager gm = game.getGameManager();
 		
 		gm.getTurtle().restart();
 		gm.getPlayer().render(gm.getTurtle());
-		gm.getLevel().render();
+		gm.getLevel().render(gm.getTurtle());
+		
+		repaint();
+		
 	}
 
 	/**
