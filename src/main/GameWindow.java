@@ -3,12 +3,15 @@ package main;
 import turtle.*;
 import javax.swing.*;
 import javax.swing.event.*;
+
+import entities.Ghost;
+
 import java.lang.Thread;
 
 public class GameWindow extends TurtleGUI implements Runnable
 {
 	private static final long serialVersionUID = 1L;
-	static final int UPDATE_RATE = 4;  // number of game update per second
+	static final int UPDATE_RATE = 6;  // number of game update per second
 	
 	private Game game;
 	private Thread thread;
@@ -76,8 +79,12 @@ public class GameWindow extends TurtleGUI implements Runnable
 		GameManager gm = game.getGameManager();
 		
 		gm.getTurtle().restart();
-		gm.getPlayer().render(gm.getTurtle());
-		gm.getLevel().render(gm.getTurtle());
+		gm.getPlayer().render(getTurtle());
+		gm.getLevel().render(getTurtle());
+		Ghost[] ghosts = gm.getLevel().getGhosts();
+		for(Ghost ghost : ghosts) {
+			ghost.render(getTurtle());
+		}
 		
 		repaint();
 		

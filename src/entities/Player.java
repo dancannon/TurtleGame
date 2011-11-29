@@ -28,7 +28,6 @@ public class Player extends MoveableEntity
 	
 	public void tick()
 	{
-		double secondsPerMove = 16;
 		time++;
 
 		Point2D newPosition = (Point2D) getPosition().clone(); 
@@ -109,6 +108,7 @@ public class Player extends MoveableEntity
 		setPosition(position);
 		return true;
 	}
+
 
 	/**
 	 * @param lives the lives to set

@@ -47,7 +47,7 @@ abstract public class MoveableEntity extends Entity
 			}
 			
 			//Check if move is blocked
-			if(this.getGameManager().getLevel().getTile(position).getType() == LevelTile.TYPE_WALL) {
+			if(getGameManager().getLevel().getTile(position).getType() == LevelTile.TYPE_WALL) {
 				return false;
 			}
 			

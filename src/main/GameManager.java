@@ -12,7 +12,7 @@ public class GameManager
 	private Player player;	
 	private Ghost[] ghosts;
 	private Level level;
-	private int levelID = 10;
+	private int levelID = 1;
 	private int score;
 	
 	private double speed = 1;
@@ -36,10 +36,10 @@ public class GameManager
 		
 		player = new Player(new Point2D.Double(level.spawn.getX(), level.spawn.getY()), this);
 		ghosts = new Ghost[4];
-		ghosts[0] = new Ghost(Color.red, new Point2D.Double(10, 13), this);
-		ghosts[1] = new Ghost(Color.pink, new Point2D.Double(11, 13), this);
-		ghosts[2] = new Ghost(Color.cyan, new Point2D.Double(11, 12), this);
-		ghosts[3] = new Ghost(Color.orange, new Point2D.Double(11, 14), this);
+		ghosts[0] = new Ghost(Color.red, new Point2D.Double(13, 11), this);
+		ghosts[1] = new Ghost(Color.pink, new Point2D.Double(13, 12), this);
+		ghosts[2] = new Ghost(Color.cyan, new Point2D.Double(12, 12), this);
+		ghosts[3] = new Ghost(Color.orange, new Point2D.Double(14, 12), this);
 		level.setGhosts(ghosts);
 		level.setPlayer(player);
 		
@@ -51,10 +51,10 @@ public class GameManager
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
 		
 		ghosts = new Ghost[4];
-		ghosts[0] = new Ghost(Color.red, new Point2D.Double(10, 13), this);
-		ghosts[1] = new Ghost(Color.pink, new Point2D.Double(11, 13), this);
-		ghosts[2] = new Ghost(Color.cyan, new Point2D.Double(11, 12), this);
-		ghosts[3] = new Ghost(Color.orange, new Point2D.Double(11, 14), this);
+		ghosts[0] = new Ghost(Color.red, new Point2D.Double(13, 11), this);
+		ghosts[1] = new Ghost(Color.pink, new Point2D.Double(13, 12), this);
+		ghosts[2] = new Ghost(Color.cyan, new Point2D.Double(12, 12), this);
+		ghosts[3] = new Ghost(Color.orange, new Point2D.Double(14, 12), this);
 		this.level.resetMap();
 		this.level.setGhosts(ghosts);
 		this.level.getPlayer().setPosition(new Point2D.Double(this.level.spawn.getX(), this.level.spawn.getY()));

@@ -4,6 +4,8 @@ import turtle.*;
 
 import java.awt.event.KeyEvent;
 
+import entities.Ghost;
+
 public class Game
 {
 	private int time;
@@ -46,6 +48,22 @@ public class Game
 		}
 		
 		getGameManager().getPlayer().tick();
+		
+		System.out.println(time);
+		Ghost[] ghosts = getGameManager().getLevel().getGhosts();
+		if(time > 30) {
+			ghosts[0].tick();
+		}
+		if(time > 50) {
+			ghosts[1].tick();
+		}
+		if(time > 70) {
+			ghosts[2].tick(); 
+		}
+		if(time > 90) {
+			ghosts[3].tick();
+		}
+		
 		getGameManager().getLevel().tick();
 	}
 	
