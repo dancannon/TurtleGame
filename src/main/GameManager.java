@@ -1,19 +1,17 @@
 package main;
 
-import java.awt.Color;
 import java.awt.geom.Point2D;
 
 import turtle.Turtle;
-import entities.Ghost;
 import entities.Player;
 
 public class GameManager
 {
 	private Player player;	
-	private Ghost[] ghosts;
 	private Level level;
 	private int levelID = 1;
 	private int score;
+	private int ghostsDead;
 	
 	private double speed = 1;
 	static final double[] SPEED_MODIFIERS = {Double.NaN, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.75, 2.0, 2.5, 5};
@@ -30,17 +28,10 @@ public class GameManager
 	
 	public void newGame()
 	{
-		level = new Level(this);
+		level = Level.loadLevel(this);
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
-		System.out.println(SPEED_MODIFIERS[levelID]);
 		
-		player = new Player(new Point2D.Double(level.spawn.getX(), level.spawn.getY()), this);
-		ghosts = new Ghost[4];
-		ghosts[0] = new Ghost(Color.red, new Point2D.Double(13, 11), this);
-		ghosts[1] = new Ghost(Color.pink, new Point2D.Double(13, 12), this);
-		ghosts[2] = new Ghost(Color.cyan, new Point2D.Double(12, 12), this);
-		ghosts[3] = new Ghost(Color.orange, new Point2D.Double(14, 12), this);
-		level.setGhosts(ghosts);
+		player = new Player(new Point2D.Double(level.getSpawn().getX(), level.getSpawn().getY()), this);
 		level.setPlayer(player);
 		
 		System.out.println("Current Score:" + getScore());
@@ -50,14 +41,8 @@ public class GameManager
 	{		
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
 		
-		ghosts = new Ghost[4];
-		ghosts[0] = new Ghost(Color.red, new Point2D.Double(13, 11), this);
-		ghosts[1] = new Ghost(Color.pink, new Point2D.Double(13, 12), this);
-		ghosts[2] = new Ghost(Color.cyan, new Point2D.Double(12, 12), this);
-		ghosts[3] = new Ghost(Color.orange, new Point2D.Double(14, 12), this);
 		this.level.resetMap();
-		this.level.setGhosts(ghosts);
-		this.level.getPlayer().setPosition(new Point2D.Double(this.level.spawn.getX(), this.level.spawn.getY()));
+		this.level.getPlayer().setPosition(new Point2D.Double(this.level.getSpawn().getX(), this.level.getSpawn().getY()));
 		
 		System.out.println("Starting level " + levelID);
 		
@@ -122,7 +107,7 @@ public class GameManager
 	
 	public boolean isGameOver()
 	{
-		if(getPlayer().getLives() == 0) {
+		if(getPlayer().getLives() <= 0) {
 			return true;
 		}
 		
@@ -159,5 +144,21 @@ public class GameManager
 	public int getLevelID()
 	{
 		return levelID;
+	}
+
+	/**
+	 * @return the ghostsDead
+	 */
+	public int getGhostsDead()
+	{
+		return ghostsDead;
+	}
+
+	/**
+	 * @param ghostsDead the ghostsDead to set
+	 */
+	public void incrementGhostsDead()
+	{
+		ghostsDead++;
 	}
 }

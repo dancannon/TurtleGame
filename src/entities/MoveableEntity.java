@@ -7,8 +7,13 @@ import main.LevelTile;
 
 abstract public class MoveableEntity extends Entity
 {
+	public static final int DIRECTION_UP = 0;
+	public static final int DIRECTION_RIGHT = 1;
+	public static final int DIRECTION_DOWN = 2;
+	public static final int DIRECTION_LEFT = 3;
+	
 	protected Point2D position;
-	protected int direction = 3;
+	protected int direction = DIRECTION_LEFT;
 	
 	public MoveableEntity(Point2D position, GameManager gm)
 	{
@@ -36,6 +41,11 @@ abstract public class MoveableEntity extends Entity
 	public void setDirection(int direction)
 	{
 		this.direction = direction;
+	}
+	
+	public int getDirection()
+	{
+		return direction; 
 	}
 	
 	protected boolean checkMove(Point2D position)

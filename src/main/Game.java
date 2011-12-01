@@ -2,8 +2,6 @@ package main;
 
 import turtle.*;
 
-import java.awt.event.KeyEvent;
-
 import entities.Ghost;
 
 public class Game
@@ -29,38 +27,25 @@ public class Game
 	
 	public void tick(boolean[] keys) {
 		time++;
-
-		boolean up = keys[KeyEvent.VK_W] || keys[KeyEvent.VK_UP] || keys[KeyEvent.VK_NUMPAD8];
-		boolean down = keys[KeyEvent.VK_S] || keys[KeyEvent.VK_DOWN] || keys[KeyEvent.VK_NUMPAD2];
-		boolean left = keys[KeyEvent.VK_A] || keys[KeyEvent.VK_LEFT] || keys[KeyEvent.VK_NUMPAD4];
-		boolean right = keys[KeyEvent.VK_D] || keys[KeyEvent.VK_RIGHT] || keys[KeyEvent.VK_NUMPAD6];
-		
-//TODO: Decide whether to add pause
-//		if (keys[KeyEvent.VK_ESCAPE]) {
-//			keys[KeyEvent.VK_ESCAPE] = false;
-//			if (menu == null) {
-//				setMenu(new PauseMenu());
-//			}
-//		}
 		
 		if(getGameManager().isGameOver()) {
-			System.out.println("Level finished! Score: " + getGameManager().getScore());
+			System.out.println("Game Over! Score: " + getGameManager().getScore());
+			Runtime.getRuntime().exit(0);
 		}
 		
 		getGameManager().getPlayer().tick();
 		
-		System.out.println(time);
 		Ghost[] ghosts = getGameManager().getLevel().getGhosts();
-		if(time > 30) {
+		if(time > ghosts[0].getWait()) {
 			ghosts[0].tick();
 		}
-		if(time > 50) {
+		if(time > ghosts[1].getWait()) {
 			ghosts[1].tick();
 		}
-		if(time > 70) {
+		if(time > ghosts[2].getWait()) {
 			ghosts[2].tick(); 
 		}
-		if(time > 90) {
+		if(time > ghosts[3].getWait()) {
 			ghosts[3].tick();
 		}
 		

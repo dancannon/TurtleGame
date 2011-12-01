@@ -2,11 +2,9 @@ package turtle;
 
 import java.awt.Color;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import javax.swing.event.ChangeListener;
-import javax.swing.text.Position;
 
 import fyw.autoevent.AutoChangeEvent;
 import fyw.autoevent.AutoEventListenerList;
@@ -151,14 +149,14 @@ public class Turtle extends fyw.turtles.Turtle
 		}
 		return result;
 	}
-
-	void fireStateChange() {
-		listeners.fireEvent(ChangeListener.class, theChangeEvent);
-	}
-
-	void firePenChange() {
-		listeners.fireEvent(PenListener.class, thePenEvent);
-	}
+	
+    void fireStateChange() {
+        listeners.fireEvent(ChangeListener.class, theChangeEvent);
+    }
+    
+    void firePenChange() {
+        listeners.fireEvent(PenListener.class, thePenEvent);
+    }
 
 	/**
 	 * Add change listener.

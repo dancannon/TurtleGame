@@ -1,6 +1,5 @@
 package entities;
 
-import turtle.TurtleShape;
 import main.GameManager;
 
 public abstract class Entity

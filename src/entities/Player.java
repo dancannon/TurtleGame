@@ -2,9 +2,6 @@ package entities;
 
 import java.awt.event.KeyEvent;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
 
 import main.GameManager;
 import main.Level;
@@ -12,13 +9,13 @@ import main.LevelTile;
 
 import turtle.Turtle;
 
-public class Player extends MoveableEntity
+public class Player extends MoveableEntity 
 {	
 	public int lastMove;
 	public int time;
 	private int lives = 3;
 	public boolean dead = false;
-	public boolean playing = false;
+	public int powerupLeft = 0;
 	private int lastKey;
 	
 	public Player(Point2D position, GameManager gm)
@@ -29,43 +26,70 @@ public class Player extends MoveableEntity
 	public void tick()
 	{
 		time++;
-
+		
+		if(powerupLeft > 0) {
+			powerupLeft--;
+			if(powerupLeft == 0) {
+				for(Ghost ghost : getGameManager().getLevel().getGhosts()) {
+					ghost.setScared(false);
+				}
+			}
+		}
+		
+		updateDirection();
+		move(getNewPosition());
+	}
+	
+	private Point2D getNewPosition()
+	{
 		Point2D newPosition = (Point2D) getPosition().clone(); 
-		if(direction == 0) {
+		if(direction == Player.DIRECTION_UP) {
 			newPosition.setLocation(position.getX(), position.getY() - 1);
-		} else if(direction == 1) {
+		} else if(direction == Player.DIRECTION_RIGHT) {
 			newPosition.setLocation(position.getX() + 1, position.getY());
-		} else if(direction == 2) {
+		} else if(direction == Player.DIRECTION_DOWN) {
 			newPosition.setLocation(position.getX(), position.getY() + 1);
-		} else if(direction == 3) {
+		} else if(direction == Player.DIRECTION_LEFT) {
 			newPosition.setLocation(position.getX() - 1, position.getY());
 		}
 		
-		move(newPosition);
+		return newPosition;
 	}
 	
 	public void setLastKeyPressed(int code)
 	{
 		this.lastKey = code;
-		
+	}
+	
+	public void updateDirection()
+	{
 		if(lastKey != 0) {
 			boolean up = lastKey == KeyEvent.VK_W || lastKey == KeyEvent.VK_UP || lastKey == KeyEvent.VK_NUMPAD8;
 			boolean down = lastKey == KeyEvent.VK_S || lastKey == KeyEvent.VK_DOWN || lastKey == KeyEvent.VK_NUMPAD2;
 			boolean left = lastKey == KeyEvent.VK_A || lastKey == KeyEvent.VK_LEFT || lastKey == KeyEvent.VK_NUMPAD4;
 			boolean right = lastKey == KeyEvent.VK_D || lastKey == KeyEvent.VK_RIGHT || lastKey == KeyEvent.VK_NUMPAD6;
 
-			Point2D newPosition = getPosition(); 
+			int tempDirection = direction;
+			Point2D tempPosition = position;
+			
 			if(up) {
-				setDirection(0);
+				setDirection(Player.DIRECTION_UP);
 			} else if(right) {
-				setDirection(1);
+				setDirection(Player.DIRECTION_RIGHT);
 			} else if(down) {
-				setDirection(2);
+				setDirection(Player.DIRECTION_DOWN);
 			} else if(left) {
-				setDirection(3);
+				setDirection(Player.DIRECTION_LEFT);
 			}
 			
-			lastKey = 0;
+			//Try to move with this new direction
+			if(this.move(getNewPosition())) {
+				lastKey = 0;
+				setPosition(tempPosition);
+			} else {
+				setDirection(tempDirection);
+				setPosition(tempPosition);
+			}
 		}
 	}
 	
@@ -74,12 +98,13 @@ public class Player extends MoveableEntity
 		Point2D point = new Point2D.Double(position.getX()*20+2, (position.getY()*20)+20);
 		t.movePen(point);
 		
-		t.draw(new shapes.Player());
+		t.draw(new shapes.Player(getDirection()));
 	}
 	
 	protected boolean move(Point2D position)
 	{
 		Level level = getGameManager().getLevel();
+		int levelType = level.getTile(position).getType();
 		if(checkMove(position) == false) {
 			return false;
 		}
@@ -91,17 +116,31 @@ public class Player extends MoveableEntity
 		
 		//If entity lands on pipe tile teleport to exit
 		try {
-			if(level.getTile(position).getType() == LevelTile.TYPE_PIPE) {
+			if(levelType == LevelTile.TYPE_PIPE) {
 				position = level.getExitPipe(position);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
 			return false;
 		}
 		
-		if(level.getTile(position).getType() == LevelTile.TYPE_DOT) {
+		/**
+		 * If the player lands on a dot then replace the tile with air and increment the players score. 
+		 * 
+		 * If it is a powerup then allow the player to eat ghosts for a brief amount of time
+		 */
+		if(levelType == LevelTile.TYPE_DOT) {
 			level.setTile(position, new LevelTile(LevelTile.TYPE_AIR));
 			getGameManager().incrementScore(10);
+			System.out.println("Current Score:" + getGameManager().getScore());
+		}
+		
+		if(levelType == LevelTile.TYPE_POWER_DOT) {
+			powerupLeft = 20;
+			for(Ghost ghost : getGameManager().getLevel().getGhosts()) {
+				ghost.setScared(true);
+			}
+			level.setTile(position, new LevelTile(LevelTile.TYPE_AIR));
+			getGameManager().incrementScore(50);
 			System.out.println("Current Score:" + getGameManager().getScore());
 		}
 		
@@ -111,11 +150,11 @@ public class Player extends MoveableEntity
 
 
 	/**
-	 * @param lives the lives to set
+	 * @param lives the lives to set 
 	 */
-	public void setLives(int lives)
+	public void decrementLives()
 	{
-		this.lives = lives;
+		this.lives--;
 	}
 
 	/**

@@ -7,19 +7,14 @@ package turtle;
 
 import javax.swing.*;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.Point2D;
-import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Dimension;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.Insets;
 
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
-import javax.swing.event.*;
 
 public class TurtleView extends JPanel
 {
@@ -58,7 +53,6 @@ public class TurtleView extends JPanel
 		Graphics offG = offscreen.getGraphics();
 		
 		//Clear the offscreen image.
-		Dimension d = getSize();
 		offG.setColor(getBackground());
 		offG.fillRect(0, 0, WIDTH, HEIGHT);
 		

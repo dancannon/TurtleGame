@@ -1,9 +1,6 @@
 package turtle;
 
 import java.awt.BorderLayout;
-import javax.swing.*;
-
-import fyw.turtles.TurtleControlPanel;
 
 public class TurtleGUIPane extends javax.swing.JPanel
 {

@@ -1,8 +1,6 @@
 package main;
 
 import turtle.*;
-import javax.swing.*;
-import javax.swing.event.*;
 
 import entities.Ghost;
 
@@ -11,7 +9,7 @@ import java.lang.Thread;
 public class GameWindow extends TurtleGUI implements Runnable
 {
 	private static final long serialVersionUID = 1L;
-	static final int UPDATE_RATE = 6;  // number of game update per second
+	static final int UPDATE_RATE = 5;  // number of game update per second
 	
 	private Game game;
 	private Thread thread;

@@ -7,7 +7,7 @@ import turtle.TurtleShape;
 
 public class Dot implements TurtleShape
 {
-	static final double RADIUS = 4;
+	static final double RADIUS = 2;
 	
 	@Override
 	public void drawMe(Turtle turtle)

@@ -1,16 +1,10 @@
 package turtle;
 
-import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-
 import javax.swing.JFrame;
 
 public class TurtleGUI extends JFrame
 {
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 600;
-	private static final int HEIGHT = 400;
 	
     private Turtle turtle;
 
