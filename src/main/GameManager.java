@@ -7,16 +7,23 @@ import entities.Player;
 
 public class GameManager
 {
+	private int time;
 	private Player player;	
 	private Level level;
 	private int levelID = 1;
-	private int score;
+	public int score;
+	public String status = "";
 	private int ghostsDead;
 	
 	private double speed = 1;
-	static final double[] SPEED_MODIFIERS = {Double.NaN, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.75, 2.0, 2.5, 5};
+	static final double[] SPEED_MODIFIERS = {Double.NaN, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.75, 2.0, 2.5, 3.5};
 	
 	private Turtle turtle;
+	
+	// listener list for change and pen events
+    private ChangeListener scoreChangeListener;
+    private ChangeListener statusChangeListener;
+    private ChangeListener livesChangeListener;
 	
 	public GameManager(Turtle turtle)
 	{
@@ -28,23 +35,38 @@ public class GameManager
 	
 	public void newGame()
 	{
+		setTime(0);
 		level = Level.loadLevel(this);
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
 		
 		player = new Player(new Point2D.Double(level.getSpawn().getX(), level.getSpawn().getY()), this);
 		level.setPlayer(player);
 		
-		System.out.println("Current Score:" + getScore());
+		setStatus("Ready!");
+	}
+	
+	public void resetGame()
+	{
+		setTime(0);
+		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
+		setLevelID(1);
+		setScore(0);
+		
+		this.level.resetMap();
+		this.level.getPlayer().setPosition(new Point2D.Double(this.level.getSpawn().getX(), this.level.getSpawn().getY()));
+		
+		setStatus("Ready!");
 	}
 	
 	public void newLevel(int levelID)
 	{		
+		setTime(0);
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
 		
 		this.level.resetMap();
 		this.level.getPlayer().setPosition(new Point2D.Double(this.level.getSpawn().getX(), this.level.getSpawn().getY()));
 		
-		System.out.println("Starting level " + levelID);
+		setStatus("Starting level " + levelID);
 		
 		this.setLevelID(levelID);
 	}
@@ -87,6 +109,7 @@ public class GameManager
 	public void setScore(int score)
 	{
 		this.score = score;
+		fireScoreChange();
 	}
 	
 	/**
@@ -95,6 +118,7 @@ public class GameManager
 	public void incrementScore(int amount)
 	{
 		this.score += amount;
+		fireScoreChange();
 	}
 
 	/**
@@ -160,5 +184,79 @@ public class GameManager
 	public void incrementGhostsDead()
 	{
 		ghostsDead++;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus()
+	{
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status)
+	{
+		this.status = status;
+		fireStatusChange();
+	}
+	
+	public void setScoreListener(ChangeListener l)
+	{
+		scoreChangeListener = l;
+	}
+	
+	public void setStatusListener(ChangeListener l)
+	{
+		statusChangeListener = l;
+	}
+	
+	public void setLivesListener(ChangeListener l)
+	{
+		livesChangeListener = l;
+	}
+	
+	public void fireLivesChange()
+	{
+		if(livesChangeListener != null) {
+			livesChangeListener.propertyChanged();
+		}
+	}
+	
+	private void fireScoreChange()
+	{
+		if(scoreChangeListener != null) {
+			scoreChangeListener.propertyChanged();
+		}
+	}
+	
+	private void fireStatusChange()
+	{
+		if(statusChangeListener != null) {
+			statusChangeListener.propertyChanged();
+		}
+	}
+
+	/**
+	 * @return the time
+	 */
+	public int getTime()
+	{
+		return time;
+	}
+
+	/**
+	 * @param time the time to set
+	 */
+	public void setTime(int time)
+	{
+		this.time = time;
+	}
+	
+	public void incrementTime()
+	{
+		time++;
 	}
 }

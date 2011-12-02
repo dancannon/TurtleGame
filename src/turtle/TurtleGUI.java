@@ -28,9 +28,6 @@ public class TurtleGUI extends JFrame
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setVisible(true);
         setResizable(false);
-        
-        pack();
-        validate();
     }
 
 	/**

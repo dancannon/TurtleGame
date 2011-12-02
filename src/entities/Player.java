@@ -6,7 +6,6 @@ import java.awt.geom.Point2D;
 import main.GameManager;
 import main.Level;
 import main.LevelTile;
-
 import turtle.Turtle;
 
 public class Player extends MoveableEntity 
@@ -26,6 +25,7 @@ public class Player extends MoveableEntity
 	public void tick()
 	{
 		time++;
+		Point2D tempPosition = (Point2D) position.clone();
 		
 		if(powerupLeft > 0) {
 			powerupLeft--;
@@ -37,19 +37,19 @@ public class Player extends MoveableEntity
 		}
 		
 		updateDirection();
-		move(getNewPosition());
+		move(getNewPosition(tempPosition, direction));
 	}
 	
-	private Point2D getNewPosition()
+	private Point2D getNewPosition(Point2D position, int direction)
 	{
 		Point2D newPosition = (Point2D) getPosition().clone(); 
-		if(direction == Player.DIRECTION_UP) {
+		if(direction == DIRECTION_UP) {
 			newPosition.setLocation(position.getX(), position.getY() - 1);
-		} else if(direction == Player.DIRECTION_RIGHT) {
+		} else if(direction == DIRECTION_RIGHT) {
 			newPosition.setLocation(position.getX() + 1, position.getY());
-		} else if(direction == Player.DIRECTION_DOWN) {
+		} else if(direction == DIRECTION_DOWN) {
 			newPosition.setLocation(position.getX(), position.getY() + 1);
-		} else if(direction == Player.DIRECTION_LEFT) {
+		} else if(direction == DIRECTION_LEFT) {
 			newPosition.setLocation(position.getX() - 1, position.getY());
 		}
 		
@@ -83,7 +83,7 @@ public class Player extends MoveableEntity
 			}
 			
 			//Try to move with this new direction
-			if(this.move(getNewPosition())) {
+			if(this.move(getNewPosition(position, direction))) {
 				lastKey = 0;
 				setPosition(tempPosition);
 			} else {
@@ -117,7 +117,8 @@ public class Player extends MoveableEntity
 		//If entity lands on pipe tile teleport to exit
 		try {
 			if(levelType == LevelTile.TYPE_PIPE) {
-				position = level.getExitPipe(position);
+				setPosition(level.getExitPipe(position));
+				return true;
 			}
 		} catch (Exception e) {
 			return false;
@@ -131,7 +132,6 @@ public class Player extends MoveableEntity
 		if(levelType == LevelTile.TYPE_DOT) {
 			level.setTile(position, new LevelTile(LevelTile.TYPE_AIR));
 			getGameManager().incrementScore(10);
-			System.out.println("Current Score:" + getGameManager().getScore());
 		}
 		
 		if(levelType == LevelTile.TYPE_POWER_DOT) {
@@ -141,7 +141,6 @@ public class Player extends MoveableEntity
 			}
 			level.setTile(position, new LevelTile(LevelTile.TYPE_AIR));
 			getGameManager().incrementScore(50);
-			System.out.println("Current Score:" + getGameManager().getScore());
 		}
 		
 		setPosition(position);
@@ -155,6 +154,7 @@ public class Player extends MoveableEntity
 	public void decrementLives()
 	{
 		this.lives--;
+		getGameManager().fireLivesChange();
 	}
 
 	/**

@@ -23,7 +23,7 @@ public class Ghost extends MoveableEntity
 	public Ghost(Color color, Point2D position, int wait, GameManager gm)
 	{
 		super(position, gm);
-		this.spawn = position;
+		this.setSpawn(position);
 		this.color = color;
 		this.wait = wait;
 	}
@@ -42,7 +42,12 @@ public class Ghost extends MoveableEntity
 			ArrayList<Integer> possibleDirections = new ArrayList<Integer>();
 			 
 			for(int i=0; i<4; i++) {
-				if(getOppositeDirection(direction) != i && move(getNewPosition(position, i))) {
+				Point2D newPosition = getNewPosition(position, i);
+				if(newPosition.equals(getGameManager().getPlayer().getPosition())) {
+					possibleDirections.clear();
+					possibleDirections.add(i);
+					break;
+				} else if(getOppositeDirection(direction) != i && move(newPosition)) {
 					possibleDirections.add(i);
 				}
 			}
@@ -50,7 +55,7 @@ public class Ghost extends MoveableEntity
 			setPosition(tempPosition);
 			if(!possibleDirections.isEmpty()) {
 				Object[] possibleDirectionsArr = possibleDirections.toArray();
-				int direction = (int) possibleDirectionsArr[rand.nextInt(possibleDirectionsArr.length)];
+				int direction = (Integer) possibleDirectionsArr[rand.nextInt(possibleDirectionsArr.length)];
 				setDirection(direction);
 				move(getNewPosition(tempPosition, direction));
 			}
@@ -74,14 +79,14 @@ public class Ghost extends MoveableEntity
 	
 	private Point2D getNewPosition(Point2D position, int direction)
 	{
-		Point2D newPosition = (Point2D) position.clone();
-		if(direction == Ghost.DIRECTION_UP) {
+		Point2D newPosition = (Point2D) getPosition().clone(); 
+		if(direction == DIRECTION_UP) {
 			newPosition.setLocation(position.getX(), position.getY() - 1);
-		} else if(direction == Ghost.DIRECTION_RIGHT) {
+		} else if(direction == DIRECTION_RIGHT) {
 			newPosition.setLocation(position.getX() + 1, position.getY());
-		} else if(direction == Ghost.DIRECTION_DOWN) {
+		} else if(direction == DIRECTION_DOWN) {
 			newPosition.setLocation(position.getX(), position.getY() + 1);
-		} else if(direction == Ghost.DIRECTION_LEFT) {
+		} else if(direction == DIRECTION_LEFT) {
 			newPosition.setLocation(position.getX() - 1, position.getY());
 		}
 		
@@ -129,7 +134,7 @@ public class Ghost extends MoveableEntity
 	public void respawn()
 	{
 		left = false;
-		position = spawn;
+		position = getSpawn();
 	}
 	
 	/**
@@ -178,5 +183,21 @@ public class Ghost extends MoveableEntity
 	public void setWait(int wait)
 	{
 		this.wait = wait;
+	}
+
+	/**
+	 * @return the spawn
+	 */
+	public Point2D getSpawn()
+	{
+		return spawn;
+	}
+
+	/**
+	 * @param spawn the spawn to set
+	 */
+	public void setSpawn(Point2D spawn)
+	{
+		this.spawn = spawn;
 	}
 }

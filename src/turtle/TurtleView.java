@@ -48,38 +48,40 @@ public class TurtleView extends JPanel
 	 }
 	
 	public void paint(Graphics g) {
-		Graphics2D g2 = (Graphics2D)g;
-		Image offscreen = createImage(WIDTH, HEIGHT);
-		Graphics offG = offscreen.getGraphics();
-		
-		//Clear the offscreen image.
-		offG.setColor(getBackground());
-		offG.fillRect(0, 0, WIDTH, HEIGHT);
-		
-		//Draw to offscreen
-		Point2D[] path = theTurtle.getPath();
-		Color[] colors = theTurtle.getColors();
-		boolean[] linesPresent = theTurtle.getLinesPresent();
-		int length = path.length - 1; // number of line segments
-		
-		//Draw lines		
-		int x0, y0, x1, y1;
-
-		offG.translate((int) (Math.round(origin.getX())), (int) (Math.round(origin.getY())));
-		x0 = (int) (Math.round(path[0].getX()));
-		y0 = (int) (Math.round(path[0].getY()));
-		for (int i = 0; i < length; i++) {
-			x1 = (int) (Math.round(path[i + 1].getX()));
-			y1 = (int) (Math.round(path[i + 1].getY()));
-			if (linesPresent[i]) {
-				offG.setColor(colors[i + 1]);
-				offG.drawLine(x0, y0, x1, y1);
+		try{
+			Graphics2D g2 = (Graphics2D)g;
+			Image offscreen = createImage(WIDTH, HEIGHT);
+			Graphics offG = offscreen.getGraphics();
+			
+			//Clear the offscreen image.
+			offG.setColor(getBackground());
+			offG.fillRect(0, 0, WIDTH, HEIGHT);
+			
+			//Draw to offscreen
+			Point2D[] path = theTurtle.getPath();
+			Color[] colors = theTurtle.getColors();
+			boolean[] linesPresent = theTurtle.getLinesPresent();
+			int length = path.length - 1; // number of line segments
+			
+			//Draw lines		
+			int x0, y0, x1, y1;
+	
+			offG.translate((int) (Math.round(origin.getX())), (int) (Math.round(origin.getY())));
+			x0 = (int) (Math.round(path[0].getX()));
+			y0 = (int) (Math.round(path[0].getY()));
+			for (int i = 0; i < length; i++) {
+				x1 = (int) (Math.round(path[i + 1].getX()));
+				y1 = (int) (Math.round(path[i + 1].getY()));
+				if (linesPresent[i]) {
+					offG.setColor(colors[i + 1]);
+					offG.drawLine(x0, y0, x1, y1);
+				}
+				x0 = x1;
+				y0 = y1;
 			}
-			x0 = x1;
-			y0 = y1;
-		}
-		
-		// Put the offscreen image on the screen.
-		g2.drawImage(offscreen, 0, 0, null);
+			
+			// Put the offscreen image on the screen.
+			g2.drawImage(offscreen, 0, 0, null);
+		} catch(Exception e) {}
 	}
 }

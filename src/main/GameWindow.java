@@ -4,6 +4,7 @@ import turtle.*;
 
 import entities.Ghost;
 
+import java.awt.BorderLayout;
 import java.lang.Thread;
 
 public class GameWindow extends TurtleGUI implements Runnable
@@ -23,8 +24,13 @@ public class GameWindow extends TurtleGUI implements Runnable
 		setGame(game);
 		inputHandler = new InputHandler(game.getGameManager());
 
+        ScorePane score = new ScorePane(game.getGameManager());
+        add(score, BorderLayout.SOUTH);
+		
 		addKeyListener(inputHandler);
 		addFocusListener(inputHandler);
+		
+		pack();
 	}
 	
 	public synchronized void start() {
@@ -44,25 +50,49 @@ public class GameWindow extends TurtleGUI implements Runnable
 		}
 	}
 
-	public void run() {
-		long beginTime, timeTaken, timeLeft;
-		
-		while (true) {
-			beginTime = System.nanoTime();
-			
-			tick();
-			// Refresh the display
-			render();
-			
-			// Delay timer to provide the necessary delay to meet the target rate
-			timeTaken = System.nanoTime() - beginTime;
-			double updatePeriod = 1000000000L / (UPDATE_RATE * getGameManager().getSpeed());
-			timeLeft = (long) ((updatePeriod - timeTaken) / 1000000);  // in milliseconds
-			if (timeLeft < 10) timeLeft = 10;   // set a minimum
-			try {
-				// Provides the necessary delay and also yields control so that other thread can do work.
-				Thread.sleep(timeLeft);
-			} catch (InterruptedException ex) { }
+	public void run() {	
+		int frames = 0;
+
+		double unprocessedSeconds = 0;
+		long lastTime = System.nanoTime();
+		double secondsPerTick = 1 / (UPDATE_RATE * getGameManager().getSpeed());
+
+		requestFocus();
+
+		while (running) {
+			long now = System.nanoTime();
+			long passedTime = now - lastTime;
+			lastTime = now;
+			if (passedTime < 0) passedTime = 0;
+			if (passedTime > 100000000) passedTime = 100000000;
+
+			unprocessedSeconds += passedTime / 1000000000.0;
+
+			boolean ticked = false;
+			while (unprocessedSeconds > secondsPerTick) {
+				tick();
+				unprocessedSeconds -= secondsPerTick;
+				ticked = true;
+
+				getGameManager().incrementTime();
+				if (getGameManager().getTime() % 60 == 0) {
+					System.out.println(frames + " fps");
+					lastTime += 1000;
+					frames = 0;
+				}
+			}
+
+			if (ticked) {
+				render();
+				frames++;
+			} else {
+				try {
+					Thread.sleep(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+
 		}
 	}
 	

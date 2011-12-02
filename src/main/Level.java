@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 
 import entities.Ghost;
 import entities.Player;
+import entities.RedGhost;
 
 import turtle.Turtle;
 
@@ -36,21 +37,11 @@ public class Level
 	
 	public void tick()
 	{
-		if(isLevelComplete()) {
-			if(getGameManager().getLevelID() == 10) {
-				System.out.println("Epic Win! Your score is " + getGameManager().getScore());
-				Runtime.getRuntime().exit(0);
-			} else {
-				System.out.println("Level Complete. Score: " + getGameManager().getScore());
-				getGameManager().newLevel(getGameManager().getLevelID() + 1);
-			}
-		}
-		
-		for(Ghost ghost : ghosts) {
-			if(ghost.getPosition().equals(getPlayer().getPosition())) {
-				if(ghost.isScared()) {
-					ghost.setScared(false);
-					ghost.respawn();
+		for(int i=0; i<ghosts.length; i++) {
+			if(ghosts[i].getPosition().equals(getPlayer().getPosition())) {
+				if(ghosts[i].isScared()) {
+					ghosts[i].setScared(false);
+					ghosts[i].respawn();
 					if(getGameManager().getGhostsDead() == 0) {
 						getGameManager().incrementScore(200);
 					} else if(getGameManager().getGhostsDead() == 1) {
@@ -62,8 +53,13 @@ public class Level
 					}
 					getGameManager().incrementGhostsDead();
 				} else {
+					SoundEffect.DIEING.play();
 					getGameManager().getLevel().getPlayer().decrementLives();
-					getGameManager().newLevel(getGameManager().getLevelID());
+					getPlayer().setPosition(spawn);
+					for(int j=0; j<ghosts.length; j++) {
+						ghosts[j].respawn();
+					}
+					getGameManager().setTime(40);
 				}
 			}
 		}
@@ -186,8 +182,7 @@ public class Level
 						this.setSpawn(new Point2D.Double(x, y));
 					} else if(color == 0xff0000) {
 						this.map[y][x] = new LevelTile(LevelTile.TYPE_AIR);
-						this.ghosts[0] = new Ghost(new Color(255,0,0), new Point2D.Double(x, y), 0, gm);
-						this.ghosts[0].setLeft(true);
+						this.ghosts[0] = new RedGhost(new Point2D.Double(x, y), 0, gm);
 						this.ghosts[0].setDirection(Ghost.DIRECTION_LEFT);
 					} else if(color == 0x00ffde) {
 						this.map[y][x] = new LevelTile(LevelTile.TYPE_AIR);

@@ -12,7 +12,7 @@ import fyw.turtles.AutoPenEvent;
 import fyw.turtles.PenListener;
 import turtle.TurtleShape;
 
-public class Turtle extends fyw.turtles.Turtle
+public class Turtle
 {	
     private double heading = 0.0; //degrees clockwise from North
     private Point2D position;
