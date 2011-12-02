@@ -41,6 +41,10 @@ public class Ghost extends MoveableEntity
 			Point2D tempPosition = (Point2D) position.clone();
 			ArrayList<Integer> possibleDirections = new ArrayList<Integer>();
 			 
+			if(position.equals(getGameManager().getPlayer().getPosition())) {
+				return;
+			}
+			
 			for(int i=0; i<4; i++) {
 				Point2D newPosition = getNewPosition(position, i);
 				if(newPosition.equals(getGameManager().getPlayer().getPosition())) {
