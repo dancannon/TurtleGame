@@ -36,6 +36,7 @@ public class Game
 				getGameManager().setTime(-1);
 			}
 			
+			//If game time is at -1 then end tick now
 			if(getGameManager().getTime() == -1) {
 				return;
 			}

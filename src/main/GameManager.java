@@ -71,6 +71,51 @@ public class GameManager
 		this.setLevelID(levelID);
 	}
 
+	public void setScoreListener(ChangeListener l)
+	{
+		scoreChangeListener = l;
+	}
+	
+	public void setStatusListener(ChangeListener l)
+	{
+		statusChangeListener = l;
+	}
+	
+	public void setLivesListener(ChangeListener l)
+	{
+		livesChangeListener = l;
+	}
+	
+	public void fireLivesChange()
+	{
+		if(livesChangeListener != null) {
+			livesChangeListener.propertyChanged();
+		}
+	}
+	
+	private void fireScoreChange()
+	{
+		if(scoreChangeListener != null) {
+			scoreChangeListener.propertyChanged();
+		}
+	}
+	
+	private void fireStatusChange()
+	{
+		if(statusChangeListener != null) {
+			statusChangeListener.propertyChanged();
+		}
+	}
+	
+	public boolean isGameOver()
+	{
+		if(getPlayer().getLives() <= 0) {
+			return true;
+		}
+		
+		return false;
+	}
+	
 	/**
 	 * @return the turtle
 	 */
@@ -127,15 +172,6 @@ public class GameManager
 	public int getScore()
 	{
 		return score;
-	}
-	
-	public boolean isGameOver()
-	{
-		if(getPlayer().getLives() <= 0) {
-			return true;
-		}
-		
-		return false;
 	}
 
 	/**
@@ -201,42 +237,6 @@ public class GameManager
 	{
 		this.status = status;
 		fireStatusChange();
-	}
-	
-	public void setScoreListener(ChangeListener l)
-	{
-		scoreChangeListener = l;
-	}
-	
-	public void setStatusListener(ChangeListener l)
-	{
-		statusChangeListener = l;
-	}
-	
-	public void setLivesListener(ChangeListener l)
-	{
-		livesChangeListener = l;
-	}
-	
-	public void fireLivesChange()
-	{
-		if(livesChangeListener != null) {
-			livesChangeListener.propertyChanged();
-		}
-	}
-	
-	private void fireScoreChange()
-	{
-		if(scoreChangeListener != null) {
-			scoreChangeListener.propertyChanged();
-		}
-	}
-	
-	private void fireStatusChange()
-	{
-		if(statusChangeListener != null) {
-			statusChangeListener.propertyChanged();
-		}
 	}
 
 	/**
