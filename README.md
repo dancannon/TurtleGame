@@ -5,7 +5,7 @@ I decided to create a simple version of Pacman.
 
 **Note**: The source is located on [GitHub](http://github.com/dancannon/TurtleGame)
 
-![Screenshot](http://github.com)
+![Screenshot](https://github.com/dancannon/TurtleGame/raw/master/game.PNG)
 
 ## Requirements ##
 
