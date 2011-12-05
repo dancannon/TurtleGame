@@ -1,5 +1,5 @@
 .classpath
 .settings
-.preferences
+.preferences.xml
 .project
 Pacman.jar
