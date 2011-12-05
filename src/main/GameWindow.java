@@ -51,8 +51,6 @@ public class GameWindow extends TurtleGUI implements Runnable
 	}
 
 	public void run() {	
-		int frames = 0;
-
 		double unprocessedSeconds = 0;
 		long lastTime = System.nanoTime();
 		double secondsPerTick = 1 / (UPDATE_RATE * getGameManager().getSpeed());
@@ -76,15 +74,12 @@ public class GameWindow extends TurtleGUI implements Runnable
 
 				getGameManager().incrementTime();
 				if (getGameManager().getTime() % 60 == 0) {
-					System.out.println(frames + " fps");
 					lastTime += 1000;
-					frames = 0;
 				}
 			}
 
 			if (ticked) {
 				render();
-				frames++;
 			} else {
 				try {
 					Thread.sleep(1);
