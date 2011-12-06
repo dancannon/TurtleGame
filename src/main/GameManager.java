@@ -10,13 +10,13 @@ public class GameManager
 	private int time;
 	private Player player;	
 	private Level level;
-	private int levelID = 1;
+	private int levelID = 8;
 	public int score;
 	public String status = "";
 	private int ghostsDead;
 	
 	private double speed = 1;
-	static final double[] SPEED_MODIFIERS = {Double.NaN, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.75, 2.0, 2.5, 3.5};
+	static final double[] SPEED_MODIFIERS = {Double.NaN, 1, 1.2, 1.4, 1.5, 1.6, 1.75, 2.0, 2.5, 3.5, 4};
 	
 	private Turtle turtle;
 	
@@ -70,11 +70,13 @@ public class GameManager
 	public void newLevel(int levelID)
 	{		
 		setTime(0);
+    
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
 		
 		this.level.resetMap();
 		this.level.getPlayer().setPosition(new Point2D.Double(this.level.getSpawn().getX(), this.level.getSpawn().getY()));
-		
+	
+
 		setStatus("Starting level " + levelID);
 		
 		this.setLevelID(levelID);

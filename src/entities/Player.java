@@ -135,7 +135,7 @@ public class Player extends MoveableEntity
 		}
 		
 		if(levelType == LevelTile.TYPE_POWER_DOT) {
-			powerupLeft = 20;
+			powerupLeft = 40;
 			for(Ghost ghost : getGameManager().getLevel().getGhosts()) {
 				ghost.setScared(true);
 			}
@@ -157,12 +157,15 @@ public class Player extends MoveableEntity
 		getGameManager().fireLivesChange();
 	}
 
-	/**
-	 * @param lives the lives to set 
-	 */
 	public void decrementLives()
 	{
 		this.lives--;
+		getGameManager().fireLivesChange();
+	}
+
+	public void incrementLives()
+	{
+		this.lives++;
 		getGameManager().fireLivesChange();
 	}
 

@@ -46,7 +46,7 @@ public class Game
 			if(getGameManager().getTime() < START_TIME) {
 				return;
 			}
-			if(getGameManager().getTime() == START_TIME) {
+			if(getGameManager().getTime() == START_TIME + 1) {
 				getGameManager().setStatus("");
 			}
 			
@@ -56,6 +56,7 @@ public class Game
 					getGameManager().setTime(-1);
 				} else {
 					getGameManager().setStatus("Level Complete.");
+          getGameManager().getPlayer().incrementLives();
 					Thread.sleep(5000);
 					getGameManager().newLevel(getGameManager().getLevelID() + 1);
 				}
