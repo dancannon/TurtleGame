@@ -53,7 +53,6 @@ public class Level
 					}
 					getGameManager().incrementGhostsDead();
 				} else {
-					SoundEffect.DIEING.play();
 					getGameManager().getLevel().getPlayer().decrementLives();
 					getPlayer().setPosition(getSpawn());
 					for(int j=0; j<getGhosts().length; j++) {
