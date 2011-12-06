@@ -15,7 +15,7 @@ public abstract class Entity
 	 * @return the gm
 	 */
 	public GameManager getGameManager()
-	{
+ 	{
 		return gm;
 	}
 }

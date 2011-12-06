@@ -11,7 +11,7 @@ public class Game
 	private GameManager gameManager;
 	private GameWindow window;
 	
-	final static int START_TIME = 50;
+	final static int START_TIME = 30;
 		
 	public Game(GameManager gameManager)
 	{
@@ -42,10 +42,7 @@ public class Game
 			}
 			
 			getGameManager().incrementTime();
-			
-			if(getGameManager().getTime() == 1) {
-	        	SoundEffect.START.play();
-			}			
+				
 			if(getGameManager().getTime() < START_TIME) {
 				return;
 			}

@@ -36,6 +36,7 @@ public class Turtle
 		linesPresent = new ArrayList<Boolean>();
 		position = new Point2D.Double(0.0, 0.0);
 		path.add(position);
+		colors.add(Color.black);
 		isPenDownField = true;
 	}
 

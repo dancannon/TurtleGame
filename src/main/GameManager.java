@@ -36,12 +36,17 @@ public class GameManager
 	public void newGame()
 	{
 		setTime(0);
+    setScore(0);
 		level = Level.loadLevel(this);
 		setSpeed(getSpeed() * SPEED_MODIFIERS[levelID]);
 		
 		player = new Player(new Point2D.Double(level.getSpawn().getX(), level.getSpawn().getY()), this);
+    player.resetLives();
 		level.setPlayer(player);
 		
+    fireLivesChange();
+    fireScoreChange();
+
 		setStatus("Ready!");
 	}
 	
@@ -54,7 +59,11 @@ public class GameManager
 		
 		this.level.resetMap();
 		this.level.getPlayer().setPosition(new Point2D.Double(this.level.getSpawn().getX(), this.level.getSpawn().getY()));
+    this.level.getPlayer().resetLives();
 		
+    fireLivesChange();
+    fireScoreChange();
+
 		setStatus("Ready!");
 	}
 	

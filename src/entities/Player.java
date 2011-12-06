@@ -149,6 +149,15 @@ public class Player extends MoveableEntity
 
 
 	/**
+	 * reset the lives to 3
+	 */
+	public void resetLives()
+	{
+		this.lives = 3;
+		getGameManager().fireLivesChange();
+	}
+
+	/**
 	 * @param lives the lives to set 
 	 */
 	public void decrementLives()
